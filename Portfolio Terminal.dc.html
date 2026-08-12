@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="_ds/broadsheet-d39dfdc2-145c-45b5-8a79-5a60c2adebc6/styles.css">
+<script src="_ds/broadsheet-d39dfdc2-145c-45b5-8a79-5a60c2adebc6/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&family=Inconsolata:wght@300;400;500;600;700&display=swap">
+<script src="./image-slot.js"></script>
+<style>
+  :root {
+    --t-bg:#100E0C; --t-fg:#E8E4DE; --t-accent:#A3E635; --t-mut:#8B857C;
+    --t-dim:#847D73; --t-faint:#6B6459; --t-line:rgba(232,228,222,0.08);
+    --t-line2:rgba(232,228,222,0.14); --t-tint:rgba(163,230,53,0.06);
+    --t-tint2:rgba(163,230,53,0.10); --t-chrome:rgba(16,14,12,0.88);
+    --t-font:'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --t-radius:4px; --t-radius-lg:6px; --t-scan:0.5;
+  }
+  html { overflow-x:hidden; }
+  html, body { margin:0; padding:0; background:var(--t-bg); color:var(--t-fg);
+    font-family:var(--t-font); font-size:15px; -webkit-font-smoothing:antialiased; }
+  body { overflow-x:hidden; transition:background 420ms ease, color 420ms ease; }
+  h1, h2, h3, h4 { font-family:var(--t-font) !important; font-weight:600; }
+  a { color:var(--t-fg); text-decoration:none; }
+  a:hover { color:var(--t-accent); }
+  ::selection { background:var(--t-tint2); }
+  *:focus-visible { outline:1px solid var(--t-accent); outline-offset:2px; }
+  @keyframes t-caret { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  @keyframes t-type { from{width:0} to{width:100%} }
+  @keyframes t-in { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+  @keyframes t-boot { from{opacity:0} to{opacity:1} }
+  image-slot { --slot-bg:rgba(255,255,255,0.04); }
+</style>
+</helmet>
+
+<div style="{{ themeVars }}">
+<div style="position:relative;min-height:100vh;background:var(--t-bg);font-family:var(--t-font);color:var(--t-fg);padding-bottom:calc(clamp(96px,14vh,132px) + env(safe-area-inset-bottom, 0px));transition:background 420ms ease,color 420ms ease">
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:94;pointer-events:none;opacity:var(--t-scan);background:repeating-linear-gradient(180deg,rgba(255,255,255,0.014) 0 1px,transparent 1px 3px)"></div>
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:93;pointer-events:none;background:radial-gradient(120% 80% at 50% 0%, var(--t-tint), transparent 62%)"></div>
+
+  <div style="position:fixed;top:0;left:0;right:0;z-index:96;background:var(--t-chrome);backdrop-filter:blur(18px);border-bottom:1px solid var(--t-line)">
+    <div style="max-width:1120px;margin:0 auto;padding:calc(9px + env(safe-area-inset-top, 0px)) clamp(12px,3.5vw,40px) 9px;display:flex;align-items:center;gap:clamp(8px,1.4vw,14px)">
+      <sc-if value="{{ zshWide }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;gap:7px;flex-shrink:0">
+          <span style="width:10px;height:10px;border-radius:50%;background:var(--t-faint)"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:var(--t-faint)"></span>
+          <span style="width:10px;height:10px;border-radius:50%;background:var(--t-accent)"></span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isPwsh }}" hint-placeholder-val="{{ false }}">
+        <span style="width:15px;height:15px;flex-shrink:0;border:1px solid var(--t-mut);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:var(--t-mut)">PS</span>
+      </sc-if>
+      <span style="font-size:12.5px;color:var(--t-mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto">{{ titleText }}</span>
+
+      <div style="margin-left:auto;display:flex;align-items:center;gap:0;flex-shrink:0;border:1px solid var(--t-line2);border-radius:var(--t-radius);overflow:hidden">
+        <sc-for list="{{ shells }}" as="s" hint-placeholder-count="2">
+          <button type="button" onClick="{{ s.pick }}" title="{{ s.title }}" style="background:{{ s.bg }};border:none;color:{{ s.color }};font-family:inherit;font-size:12px;font-weight:600;letter-spacing:0.02em;padding:7px 12px;min-height:32px;cursor:pointer;transition:background 300ms ease,color 300ms ease" style-hover="color:var(--t-fg)">{{ s.label }}</button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ pwshWide }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:2px;flex-shrink:0;margin-left:2px">
+          <span style="width:26px;height:22px;display:flex;align-items:flex-end;justify-content:center;color:var(--t-mut);font-size:11px;padding-bottom:4px">▁</span>
+          <span style="width:26px;height:22px;display:flex;align-items:center;justify-content:center;color:var(--t-mut);font-size:10px">❐</span>
+          <span style="width:26px;height:22px;display:flex;align-items:center;justify-content:center;color:var(--t-mut);font-size:11px">✕</span>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="max-width:1120px;margin:0 auto;padding:0 clamp(16px,3.5vw,40px)">
+
+    <section data-screen-label="whoami" id="whoami" style="padding:calc(clamp(74px,12vh,150px) + env(safe-area-inset-top, 0px)) 0 clamp(50px,8vh,90px)">
+      <sc-if value="{{ isPwsh }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:12.5px;color:var(--t-dim);line-height:1.9;margin-bottom:26px;animation:t-boot 500ms ease both">
+          <div>PowerShell 7.4.6</div>
+          <div>Loading personal and system profiles took 612ms.</div>
+        </div>
+      </sc-if>
+      <div style="display:flex;gap:10px;align-items:baseline;font-size:clamp(13px,1.2vw,15px);color:var(--t-dim);flex-wrap:wrap">
+        <span style="color:var(--t-accent)">{{ prompt }}</span>
+        <span style="overflow:hidden;white-space:nowrap;display:inline-block;animation:t-type 900ms steps(24,end) 200ms both;color:var(--t-fg)">{{ cmd.whoami }}</span>
+      </div>
+      <div style="margin-top:clamp(28px,5vh,44px);animation:t-in 700ms cubic-bezier(.16,1,.3,1) 900ms both">
+        <h1 style="margin:0;font-size:clamp(30px,5.2vw,68px);line-height:1.06;letter-spacing:-0.035em;font-weight:600">Arvind&nbsp;Acharya<span style="color:var(--t-accent);animation:t-caret 1.1s step-end infinite;margin-left:0.1em">{{ caret }}</span></h1>
+        <div style="margin-top:14px;font-size:clamp(14px,1.4vw,18px);color:var(--t-accent);letter-spacing:0.02em">AI Engineer · intelligent systems, automation, developer tooling</div>
+        <p style="margin:clamp(26px,4vh,38px) 0 0;max-width:68ch;font-size:clamp(14px,1.2vw,16px);line-height:1.78;color:var(--t-fg);opacity:0.78;text-wrap:pretty">I design intelligent systems, automation workflows, and developer solutions that transform complex processes into scalable, efficient experiences. Passionate about turning ideas into products that create measurable impact.</p>
+        <div style="margin-top:clamp(30px,5vh,46px);display:flex;flex-wrap:wrap;gap:10px">
+          <a href="#projects" style="border:1px solid var(--t-accent);color:var(--t-accent);border-radius:var(--t-radius);padding:12px 16px;font-size:13.5px;font-weight:500;min-height:44px;display:flex;align-items:center" style-hover="background:var(--t-tint2);color:var(--t-accent)">{{ arrow }} {{ cmd.ls }}</a>
+          <a href="Arvind_Acharya_Resume.pdf" target="_blank" rel="noopener" style="border:1px solid var(--t-line2);color:var(--t-mut);border-radius:var(--t-radius);padding:12px 16px;font-size:13.5px;min-height:44px;display:flex;align-items:center" style-hover="border-color:var(--t-mut);color:var(--t-fg)">{{ arrow }} {{ cmd.resume }}</a>
+        </div>
+        <div style="margin-top:clamp(34px,6vh,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:12px 30px;max-width:820px;font-size:13px;color:var(--t-dim)">
+          <sc-for list="{{ facts }}" as="f" hint-placeholder-count="4">
+            <div style="display:flex;gap:10px;align-items:baseline"><span style="color:var(--t-faint);flex-shrink:0">{{ f.bullet }}</span><span style="flex-shrink:0">{{ f.k }}</span><span style="color:var(--t-fg);opacity:0.78">{{ f.v }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section data-screen-label="projects" id="projects" style="padding:clamp(50px,8vh,90px) 0">
+      <sc-if value="{{ indexView }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div style="display:flex;gap:10px;align-items:baseline;font-size:14px;margin-bottom:8px;flex-wrap:wrap">
+            <span style="color:var(--t-accent)">{{ prompt }}</span><span>{{ cmd.ls }}</span>
+          </div>
+          <div style="font-size:12.5px;color:var(--t-dim);margin-bottom:20px">{{ lsHeader }}</div>
+          <div>
+            <sc-for list="{{ projects }}" as="p" hint-placeholder-count="5">
+              <button type="button" onClick="{{ p.open }}" onMouseEnter="{{ p.hover }}" onMouseLeave="{{ p.unhover }}" style="width:100%;background:{{ p.bg }};border:none;border-top:1px solid var(--t-line);color:var(--t-fg);font-family:inherit;text-align:left;cursor:pointer;padding:16px clamp(8px,1.2vw,14px);margin:0 clamp(-8px,-1.2vw,-14px);display:block;transition:background 300ms ease">
+                <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+                  <span style="display:grid;grid-template-columns:auto auto 1fr auto;gap:6px clamp(12px,2vw,26px);align-items:baseline">
+                    <span style="font-size:12.5px;color:var(--t-mut);white-space:nowrap">{{ p.meta }}</span>
+                    <span style="font-size:clamp(15px,1.5vw,19px);font-weight:600;color:{{ p.nameColor }};letter-spacing:-0.01em;white-space:nowrap;transition:color 250ms ease">{{ p.file }}</span>
+                    <span style="font-size:13.5px;color:var(--t-mut);line-height:1.5">{{ p.one }}</span>
+                    <span style="font-size:12.5px;color:{{ p.arrowColor }};white-space:nowrap;transition:color 250ms ease">{{ p.year }} {{ p.arrow }}</span>
+                  </span>
+                </sc-if>
+                <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;flex-direction:column;gap:6px">
+                    <span style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                      <span style="font-size:16px;font-weight:600;color:{{ p.nameColor }};letter-spacing:-0.01em;transition:color 250ms ease;word-break:break-all">{{ p.file }}</span>
+                      <span style="font-size:12.5px;color:{{ p.arrowColor }};white-space:nowrap;flex-shrink:0;transition:color 250ms ease">{{ p.year }} {{ p.arrow }}</span>
+                    </span>
+                    <span style="font-size:13.5px;color:var(--t-mut);line-height:1.55">{{ p.one }}</span>
+                  </span>
+                </sc-if>
+              </button>
+            </sc-for>
+            <div style="border-top:1px solid var(--t-line)"></div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ caseView }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:t-in 450ms ease both">
+          <div style="display:flex;gap:10px;align-items:baseline;font-size:14px;flex-wrap:wrap">
+            <span style="color:var(--t-accent)">{{ prompt }}</span><span>{{ c.catCmd }}</span>
+          </div>
+          <button type="button" onClick="{{ closeCase }}" style="margin-top:18px;background:none;border:1px solid var(--t-line2);border-radius:var(--t-radius);color:var(--t-mut);font-family:inherit;font-size:13px;cursor:pointer;padding:10px 14px;min-height:44px" style-hover="color:var(--t-accent);border-color:var(--t-accent)">← {{ backLabel }}</button>
+
+          <h2 style="margin:clamp(26px,4vh,40px) 0 0;font-size:clamp(26px,4.4vw,54px);line-height:1.05;letter-spacing:-0.035em">{{ c.name }}</h2>
+          <div style="margin-top:12px;font-size:13px;color:var(--t-accent)">{{ c.domain }} · {{ c.year }}</div>
+          <p style="margin:22px 0 0;max-width:66ch;font-size:clamp(14px,1.2vw,16.5px);line-height:1.78;color:var(--t-fg);opacity:0.78;text-wrap:pretty">{{ c.lede }}</p>
+
+          <div style="margin-top:clamp(40px,6vh,72px);display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:22px">
+            <sc-for list="{{ c.metrics }}" as="m" hint-placeholder-count="3">
+              <div style="border-left:1px solid var(--t-accent);padding-left:16px">
+                <div style="font-size:clamp(20px,2.2vw,28px);font-weight:600;letter-spacing:-0.02em;color:var(--t-fg)">{{ m.v }}</div>
+                <div style="margin-top:8px;font-size:12.5px;color:var(--t-mut);line-height:1.55">{{ m.l }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="margin-top:clamp(44px,7vh,84px);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(24px,3vw,52px)">
+            <sc-for list="{{ c.chapters }}" as="ch" hint-placeholder-count="3">
+              <div>
+                <div style="font-size:12.5px;color:var(--t-accent);margin-bottom:12px">{{ ch.marker }} {{ ch.head }}</div>
+                <p style="margin:0;font-size:14px;line-height:1.8;color:var(--t-fg);opacity:0.78;text-wrap:pretty">{{ ch.body }}</p>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="margin-top:clamp(44px,7vh,84px)">
+            <div style="display:flex;gap:10px;align-items:baseline;font-size:14px;margin-bottom:18px;flex-wrap:wrap">
+              <span style="color:var(--t-accent)">{{ prompt }}</span><span>{{ stage.cmd }}</span>
+              <sc-if value="{{ draft }}" hint-placeholder-val="{{ true }}">
+                <span style="font-size:11px;color:var(--t-dim);border:1px dashed var(--t-line2);border-radius:calc(var(--t-radius) - 1px);padding:3px 8px;margin-left:auto">draft — architecture notes pending review</span>
+              </sc-if>
+            </div>
+            <div style="border:1px solid var(--t-line2);border-radius:var(--t-radius-lg);background:rgba(255,255,255,0.015)">
+              <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-wrap:wrap;border-bottom:1px solid var(--t-line2)">
+                  <sc-for list="{{ stages }}" as="s" hint-placeholder-count="5">
+                    <button type="button" onClick="{{ s.select }}" style="background:{{ s.bg }};border:none;border-right:1px solid var(--t-line);border-bottom:2px solid {{ s.underline }};color:{{ s.color }};font-family:inherit;font-size:13px;padding:14px 15px;min-height:46px;cursor:pointer;transition:all 250ms ease" style-hover="color:var(--t-fg)">{{ s.label }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--t-line2)">
+                  <sc-for list="{{ stages }}" as="s" hint-placeholder-count="5">
+                    <button type="button" onClick="{{ s.select }}" style="background:{{ s.bg }};border:none;border-bottom:2px solid {{ s.underline }};color:{{ s.color }};font-family:inherit;font-size:13px;text-align:left;padding:14px 14px;min-height:48px;cursor:pointer;transition:all 250ms ease">{{ s.label }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <div style="padding:clamp(18px,2.6vw,30px);display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(20px,3vw,44px);align-items:start">
+                <div>
+                  <div style="font-size:12.5px;color:var(--t-dim);margin-bottom:10px">{{ stage.role }}</div>
+                  <p style="margin:0;font-size:14.5px;line-height:1.75;color:var(--t-fg);text-wrap:pretty">{{ stage.detail }}</p>
+                </div>
+                <div style="display:grid;gap:9px">
+                  <sc-for list="{{ stage.flow }}" as="f" hint-placeholder-count="4">
+                    <div style="display:flex;gap:11px;font-size:13.5px;align-items:baseline">
+                      <span style="color:{{ f.glyphColor }};flex-shrink:0;white-space:pre">{{ f.glyph }}</span>
+                      <span style="color:{{ f.color }}">{{ f.label }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:clamp(40px,6vh,72px)">
+            <div style="font-size:12.5px;color:var(--t-dim);margin-bottom:14px">{{ depsLabel }}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ c.stack }}" as="t" hint-placeholder-count="6">
+                <span style="font-size:12.5px;color:var(--t-fg);opacity:0.78;border:1px solid var(--t-line2);border-radius:calc(var(--t-radius) - 1px);padding:5px 10px">{{ t.name }}</span>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="margin-top:clamp(40px,6vh,72px);display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px">
+            <div style="height:210px;border-radius:var(--t-radius-lg);overflow:hidden"><image-slot id="t-shot-a" shape="rect" placeholder="screenshot — primary surface"></image-slot></div>
+            <div style="height:210px;border-radius:var(--t-radius-lg);overflow:hidden"><image-slot id="t-shot-b" shape="rect" placeholder="screenshot — secondary view"></image-slot></div>
+          </div>
+
+          <div style="margin-top:clamp(40px,6vh,72px);border-top:1px solid var(--t-line);padding-top:22px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap">
+            <button type="button" onClick="{{ closeCase }}" style="background:none;border:none;color:var(--t-mut);font-family:inherit;font-size:13.5px;cursor:pointer;padding:11px 0;min-height:44px;text-align:left" style-hover="color:var(--t-fg)">← {{ cmd.ls }}</button>
+            <button type="button" onClick="{{ nextCase }}" style="background:none;border:none;color:var(--t-accent);font-family:inherit;font-size:13.5px;cursor:pointer;padding:11px 0;min-height:44px;text-align:right" style-hover="color:var(--t-fg)">{{ nextCmd }} →</button>
+          </div>
+        </div>
+      </sc-if>
+    </section>
+
+    <section data-screen-label="philosophy" id="philosophy" style="padding:clamp(50px,8vh,90px) 0">
+      <div style="display:flex;gap:10px;align-items:baseline;font-size:14px;margin-bottom:clamp(30px,5vh,52px);flex-wrap:wrap">
+        <span style="color:var(--t-accent)">{{ prompt }}</span><span>{{ cmd.approach }}</span>
+      </div>
+      <div style="display:grid;gap:clamp(34px,5vh,60px)">
+        <sc-for list="{{ beliefs }}" as="b" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(18px,3vw,52px);align-items:start">
+            <h3 style="margin:0;font-size:clamp(19px,2.4vw,30px);line-height:1.24;letter-spacing:-0.025em;text-wrap:balance">{{ b.head }}</h3>
+            <p style="margin:0;max-width:62ch;font-size:14px;line-height:1.8;color:var(--t-mut);text-wrap:pretty">{{ b.body }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section data-screen-label="stack" id="stack" style="padding:clamp(50px,8vh,90px) 0">
+      <div style="display:flex;gap:10px;align-items:baseline;font-size:14px;margin-bottom:clamp(24px,4vh,40px);flex-wrap:wrap">
+        <span style="color:var(--t-accent)">{{ prompt }}</span><span>{{ cmd.tree }}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:clamp(24px,3.5vw,56px)">
+        <sc-for list="{{ stackTree }}" as="g" hint-placeholder-count="4">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--t-accent);margin-bottom:14px">{{ g.name }}</div>
+            <div style="display:grid;gap:9px">
+              <sc-for list="{{ g.items }}" as="i" hint-placeholder-count="6">
+                <div style="display:flex;gap:9px;font-size:13.5px;color:var(--t-mut);line-height:1.45">
+                  <span style="color:var(--t-faint);flex-shrink:0;white-space:pre">{{ i.glyph }}</span><span>{{ i.name }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section data-screen-label="log" id="log" style="padding:clamp(50px,8vh,90px) 0">
+      <div style="display:flex;gap:10px;align-items:baseline;font-size:14px;margin-bottom:clamp(24px,4vh,40px);flex-wrap:wrap">
+        <span style="color:var(--t-accent)">{{ prompt }}</span><span>{{ cmd.log }}</span>
+      </div>
+      <div>
+        <sc-for list="{{ roles }}" as="r" hint-placeholder-count="4">
+          <div style="border-top:1px solid var(--t-line)">
+            <button type="button" onClick="{{ r.toggle }}" style="width:100%;background:none;border:none;color:var(--t-fg);font-family:inherit;text-align:left;cursor:pointer;padding:16px 0;min-height:44px;display:grid;grid-template-columns:auto 1fr auto;gap:clamp(12px,2vw,24px);align-items:baseline" style-hover="color:var(--t-accent)">
+              <span style="font-size:12.5px;color:var(--t-accent);white-space:nowrap">{{ r.hash }}</span>
+              <span>
+                <span style="display:block;font-size:clamp(15px,1.6vw,20px);font-weight:600;letter-spacing:-0.015em">{{ r.title }}</span>
+                <span style="display:block;font-size:13px;color:var(--t-mut);margin-top:5px">{{ r.org }}</span>
+              </span>
+              <span style="display:flex;gap:14px;align-items:baseline;white-space:nowrap">
+                <span style="font-size:12.5px;color:var(--t-dim)">{{ r.years }}</span>
+                <span style="font-size:13px;color:{{ r.markColor }}">{{ r.mark }}</span>
+              </span>
+            </button>
+            <sc-if value="{{ r.open }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 0 26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:clamp(18px,3vw,48px);animation:t-in 380ms ease both">
+                <p style="margin:0;font-size:14px;line-height:1.8;color:var(--t-mut);max-width:60ch;text-wrap:pretty">{{ r.brief }}</p>
+                <div style="display:grid;gap:10px">
+                  <sc-for list="{{ r.shipped }}" as="s" hint-placeholder-count="3">
+                    <div style="display:flex;gap:10px;font-size:13.5px;line-height:1.6;color:var(--t-fg);opacity:0.82"><span style="color:var(--t-accent);flex-shrink:0">+</span><span>{{ s.text }}</span></div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <div style="border-top:1px solid var(--t-line)"></div>
+      </div>
+    </section>
+
+    <section data-screen-label="about" id="about" style="padding:clamp(50px,8vh,90px) 0">
+      <div style="display:flex;gap:10px;align-items:baseline;font-size:14px;margin-bottom:clamp(26px,4vh,44px);flex-wrap:wrap">
+        <span style="color:var(--t-accent)">{{ prompt }}</span><span>{{ cmd.readme }}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(26px,4vw,72px);align-items:start">
+        <div>
+          <p style="margin:0 0 20px;font-size:clamp(16px,1.6vw,21px);line-height:1.6;letter-spacing:-0.02em;max-width:44ch;text-wrap:pretty">I grew up in Bengaluru and got curious about computers the way a lot of people my age did — by gaming on them, then wondering how they worked.</p>
+          <p style="margin:0 0 18px;font-size:14px;line-height:1.8;color:var(--t-mut);max-width:60ch;text-wrap:pretty">I travel whenever I get the chance. Somewhere new resets something that a weekend off never quite does. I watch football and support Arsenal, which has taught me more about patience than any job has. I read less than I mean to, but a bookshop is still hard to walk past.</p>
+          <p style="margin:0;font-size:14px;line-height:1.8;color:var(--t-mut);max-width:60ch;text-wrap:pretty">Most days I lift weights, though if I had the choice it would always be swimming — I am genuinely good at that one, with an undefeated streak in races I have no intention of putting at risk.</p>
+        </div>
+        <div style="height:clamp(340px,42vw,520px);border-radius:var(--t-radius-lg);overflow:hidden"><image-slot id="t-portrait" shape="rect" fit="cover" src="arvind-portrait.png" placeholder="a photo of you"></image-slot></div>
+      </div>
+    </section>
+
+    <section data-screen-label="mail" id="mail" style="padding:clamp(50px,8vh,90px) 0 clamp(30px,5vh,60px)">
+      <div style="display:flex;gap:10px;align-items:baseline;font-size:14px;margin-bottom:clamp(26px,4vh,44px);flex-wrap:wrap">
+        <span style="color:var(--t-accent)">{{ prompt }}</span><span>{{ cmd.mail }}</span>
+      </div>
+      <h2 style="margin:0;max-width:26ch;font-size:clamp(24px,4.2vw,52px);line-height:1.08;letter-spacing:-0.035em;text-wrap:balance">Have something worth building?</h2>
+      <p style="margin:20px 0 clamp(30px,5vh,48px);max-width:56ch;font-size:14.5px;line-height:1.75;color:var(--t-mut);text-wrap:pretty">Hiring, building, or stuck on a process that should already be automatic. I read everything.</p>
+      <div style="display:grid;gap:0;max-width:640px">
+        <sc-for list="{{ channels }}" as="ch" hint-placeholder-count="3">
+          <a href="{{ ch.href }}" style="border-top:1px solid var(--t-line);padding:16px 0;min-height:44px;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:baseline">
+            <span style="font-size:12.5px;color:var(--t-dim);min-width:74px">{{ ch.label }}</span>
+            <span style="font-size:clamp(14px,1.5vw,18px);font-weight:500">{{ ch.value }}</span>
+            <span style="color:var(--t-accent);font-size:13px">→</span>
+          </a>
+        </sc-for>
+        <div style="border-top:1px solid var(--t-line)"></div>
+      </div>
+      <div style="margin-top:clamp(44px,7vh,80px);font-size:12.5px;color:var(--t-mut);line-height:1.9">
+        <div>{{ exitLine }}</div>
+        <div>{{ exitNote }}</div>
+      </div>
+    </section>
+  </div>
+
+  <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+    <nav style="position:fixed;bottom:0;left:0;right:0;z-index:97;background:var(--t-chrome);backdrop-filter:blur(18px);border-top:1px solid var(--t-line)">
+      <div style="max-width:1120px;margin:0 auto;padding:9px clamp(12px,3.5vw,40px);display:flex;align-items:center;gap:clamp(8px,1.4vw,18px)">
+        <span style="font-size:12.5px;color:var(--t-accent);flex-shrink:0">{{ navGlyph }}</span>
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="6">
+          <a href="{{ n.href }}" style="font-size:12.5px;color:{{ n.color }};background:{{ n.bg }};border-radius:calc(var(--t-radius) - 1px);padding:5px 9px;white-space:nowrap;flex-shrink:0;transition:color 250ms ease,background 300ms ease" style-hover="color:var(--t-fg)">{{ n.label }}</a>
+        </sc-for>
+        <span style="margin-left:auto;font-size:12px;color:var(--t-mut);white-space:nowrap;flex-shrink:0">{{ hint }}</span>
+      </div>
+    </nav>
+  </sc-if>
+
+  <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <button type="button" onClick="{{ toggleMenu }}" style="position:fixed;bottom:calc(14px + env(safe-area-inset-bottom, 0px));left:14px;right:14px;z-index:100;background:var(--t-chrome);backdrop-filter:blur(18px);border:1px solid var(--t-line2);border-radius:var(--t-radius);box-shadow:0 10px 30px rgba(0,0,0,0.45);color:var(--t-fg);font-family:inherit;text-align:left;cursor:pointer;padding:15px 16px;display:flex;align-items:center;gap:10px;min-height:54px">
+        <span style="font-size:14px;color:var(--t-accent);flex-shrink:0">{{ barPrompt }}</span>
+        <span style="font-size:13.5px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">{{ activeCmd }}</span>
+        <span style="font-size:13px;color:var(--t-mut);flex-shrink:0;width:14px;text-align:right">{{ menuGlyph }}</span>
+      </button>
+
+      <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:fixed;inset:0;z-index:99;background:var(--t-bg);display:flex;flex-direction:column;padding:calc(20px + env(safe-area-inset-top, 0px)) 20px calc(96px + env(safe-area-inset-bottom, 0px));animation:t-in 260ms ease both;overflow-y:auto">
+          <div style="display:flex;align-items:baseline;gap:10px;font-size:13px;color:var(--t-mut);padding-bottom:18px;border-bottom:1px solid var(--t-line)">
+            <span style="color:var(--t-accent)">{{ prompt }}</span><span>{{ helpCmd }}</span>
+          </div>
+          <sc-for list="{{ menu }}" as="m" hint-placeholder-count="6">
+            <a href="{{ m.href }}" onClick="{{ toggleMenu }}" style="border-bottom:1px solid var(--t-line);padding:16px 2px;display:flex;align-items:baseline;gap:12px;min-height:56px">
+              <span style="font-size:13px;color:{{ m.dotColor }};flex-shrink:0;width:12px">{{ m.dot }}</span>
+              <span style="flex:1">
+                <span style="display:block;font-size:17px;font-weight:600;color:{{ m.color }};letter-spacing:-0.01em">{{ m.label }}</span>
+                <span style="display:block;font-size:12.5px;color:var(--t-mut);margin-top:5px">{{ m.desc }}</span>
+              </span>
+            </a>
+          </sc-for>
+          <div style="margin-top:22px;display:flex;gap:0;border:1px solid var(--t-line2);border-radius:var(--t-radius);overflow:hidden;align-self:flex-start">
+            <sc-for list="{{ shells }}" as="s" hint-placeholder-count="2">
+              <button type="button" onClick="{{ s.pick }}" style="background:{{ s.bg }};border:none;color:{{ s.color }};font-family:inherit;font-size:13px;font-weight:600;padding:12px 18px;min-height:44px;cursor:pointer">{{ s.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440},&quot;shell&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;zsh&quot;,&quot;pwsh&quot;],&quot;default&quot;:&quot;zsh&quot;,&quot;tsType&quot;:&quot;'zsh' | 'pwsh'&quot;,&quot;section&quot;:&quot;Shell&quot;},&quot;architectureDraft&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;scrollReveal&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;}}">
+const THEMES = {
+  zsh: {
+    label: 'zsh', title: 'zsh — Geist Mono on warm black',
+    bg: '#100E0C', fg: '#E8E4DE', accent: '#A3E635', mut: '#8B857C',
+    dim: '#847D73', faint: '#6B6459',
+    line: 'rgba(232,228,222,0.08)', line2: 'rgba(232,228,222,0.14)',
+    tint: 'rgba(163,230,53,0.06)', tint2: 'rgba(163,230,53,0.10)',
+    chrome: 'rgba(16,14,12,0.88)',
+    font: "'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace",
+    radius: '4px', radiusLg: '6px', scan: '0.5'
+  },
+  pwsh: {
+    label: 'pwsh', title: 'Windows PowerShell — Consolas on navy',
+    bg: '#012456', fg: '#F2F2F2', accent: '#F3D371', mut: '#A8B4C8',
+    dim: '#94A2B8', faint: '#6E7E96',
+    line: 'rgba(242,242,242,0.12)', line2: 'rgba(242,242,242,0.20)',
+    tint: 'rgba(243,211,113,0.06)', tint2: 'rgba(243,211,113,0.16)',
+    chrome: 'rgba(1,36,86,0.92)',
+    font: "Consolas, 'Inconsolata', 'Lucida Console', ui-monospace, monospace",
+    radius: '0px', radiusLg: '0px', scan: '0.14'
+  }
+};
+
+const SHELL = {
+  zsh: {
+    prompt: '%', caret: '_', arrow: '→', bullet: '·', sep: '/',
+    whoami: 'whoami --verbose',
+    ls: 'ls -l projects/',
+    lsHeader: 'total 5 — select an entry to read its case file',
+    cat: (f) => 'cat projects/' + f + '.md',
+    catBare: (f) => 'cat ' + f + '.md',
+    trace: (s) => 'trace --stage ' + s,
+    approach: 'cat philosophy.md',
+    tree: 'tree stack/',
+    log: 'git log --oneline --author=arvind',
+    readme: 'cat about.md',
+    mail: 'mail arvind',
+    help: 'help',
+    resume: 'open resume.pdf',
+    back: 'back to ls',
+    deps: '# dependencies',
+    marker: '##',
+    navGlyph: '›',
+    branch: '├─', last: '└─',
+    dirLabel: (n) => n + '/',
+    fileLabel: (f) => f + '.md',
+    exit: (cwd) => 'arvind@portfolio ' + cwd + ' % exit',
+    exitNote: 'Session ended. Figures are from my résumé — happy to walk through any of them.',
+    hint: 'scroll or select a command'
+  },
+  pwsh: {
+    prompt: 'PS C:\\portfolio>', caret: '_', arrow: '→', bullet: '-', sep: '\\',
+    whoami: 'Get-LocalUser arvind | Format-List *',
+    ls: 'Get-ChildItem .\\projects\\',
+    lsHeader: 'Directory: C:\\portfolio — Mode  LastWriteTime  Name',
+    cat: (f) => 'Get-Content .\\projects\\' + f + '.md',
+    catBare: (f) => 'Get-Content ' + f + '.md',
+    trace: (s) => 'Get-Trace -Stage ' + s,
+    approach: 'Get-Content .\\philosophy.md',
+    tree: 'Get-ChildItem .\\stack\\ -Recurse',
+    log: 'git log --oneline --author=arvind',
+    readme: 'Get-Content .\\about.md',
+    mail: 'Send-MailMessage -To arvind',
+    help: 'Get-Help *',
+    resume: 'Invoke-Item .\\resume.pdf',
+    back: 'back to Get-ChildItem',
+    deps: '# dependencies',
+    marker: '#>',
+    navGlyph: '›',
+    branch: '├─', last: '└─',
+    dirLabel: (n) => n.charAt(0).toUpperCase() + n.slice(1),
+    fileLabel: (f) => f + '.md',
+    exit: () => 'PS C:\\portfolio> exit',
+    exitNote: 'Session ended. Figures are from my résumé — happy to walk through any of them.',
+    hint: 'scroll or select a command'
+  }
+};
+
+const PROJECTS = [
+  {
+    file: 'aria', name: 'ARIA', year: '2026', domain: 'enterprise ai agent',
+    perm: '-rw-r--r--', dirmeta: '-a---  03/18/2026  9:14 AM',
+    one: 'reimbursement approvals from ten days to one',
+    lede: 'Employee reimbursements at GSK moved through inboxes, attachments and policy documents across four countries. ARIA reads the receipt, applies the policy, and files the request through Workday — approval time fell from ten days to one.',
+    metrics: [{ v: '10d → 1d', l: 'approval time, 90% faster' }, { v: '1,000+', l: 'requests processed monthly' }, { v: '4', l: 'countries in production' }],
+    stack: ['Python', 'C3.AI', 'Workday API', 'OCR', 'Copilot Studio', 'Azure', 'Docker'],
+    chapters: [
+      { head: 'the problem', body: 'Reimbursement is a policy question disguised as paperwork: someone has to read the request, apply the rules, and file it. Across four countries that took ten days per approval, and almost none of it was processing time.' },
+      { head: 'the decision', body: 'Separate reading from deciding. OCR extracts the request, a policy-reasoning layer reaches the decision, and Workday integration executes it — so the agent completes the process rather than recommending an outcome to someone else.' },
+      { head: 'shipped alone', body: 'I took ARIA from architecture to production as the sole engineer, including the country rollout and the integration surface. It now runs on GSK\'s internal AI platform at over a thousand requests a month, which is the number that matters — a pilot that survives four countries is a different artifact from a demo.' }
+    ],
+    stages: [
+      { label: 'intake', slug: 'intake', role: 'claim capture', detail: 'Reimbursement requests arrive as documents. OCR turns them into structured fields so the policy layer works on data rather than an image.', flow: ['request intake', 'ocr', 'structured fields'] },
+      { label: 'policy', slug: 'policy', role: 'policy-based reasoning', detail: 'The agent reasons over reimbursement policy to reach a decision, applied across four countries.', flow: ['policy reasoning', 'four countries', 'decision'] },
+      { label: 'workday', slug: 'workday', role: 'system of record', detail: 'Requests are filed through Workday integration, which is what makes the agent an end-to-end process rather than a recommendation.', flow: ['workday integration', 'request filed'] },
+      { label: 'approval', slug: 'approval', role: 'ten days to one', detail: 'Approval time fell from ten days to one — a 90% reduction — with more than a thousand requests processed each month.', flow: ['10 days → 1 day', '1,000+ / month', '90% faster'] },
+      { label: 'platform', slug: 'platform', role: 'where it runs', detail: 'Scaled to production on GSK\'s internal AI platform. I maintain the C3.ai agentic AI infrastructure it sits on and containerised the development workflow with Docker and CI/CD.', flow: ['gsk internal ai platform', 'c3.ai infrastructure', 'docker, ci/cd'] }
+    ]
+  },
+  {
+    file: 'sentinel', name: 'Clinical PII Classifier', year: '2025', domain: 'llm data pipeline',
+    perm: '-rw-r--r--', dirmeta: '-a---  11/04/2025  4:48 PM',
+    one: 'PII and PHI classified across clinical datasets in seconds',
+    lede: 'Clinical datasets ran roughly seventy-five columns wide, and deciding which of them held personal or health information was a manual read. The pipeline classifies them and emits three role-based variants automatically.',
+    metrics: [{ v: '15m → <10s', l: 'per-file processing time' }, { v: '65% → 98%', l: 'classification accuracy' }, { v: '3', l: 'role-based variants generated' }],
+    stack: ['Python', 'Databricks', 'LLM classification', 'Delta Lake', 'Azure', 'SQL'],
+    chapters: [
+      { head: 'the problem', body: 'Every clinical dataset handed onward needed a judgement call across roughly seventy-five columns: which of these hold personal or health information, and who is allowed to see them. By hand that ran about fifteen minutes a file.' },
+      { head: 'the decision', body: 'Classify with an LLM pipeline in Databricks, then generate the three role-based variants as an output of the classification rather than a separate manual step. Accuracy went from 65% to 98% and processing from roughly fifteen minutes to under ten seconds per file.' },
+      { head: 'why variants matter', body: 'The valuable output is not the label — it is the three ready-to-use datasets. Producing them automatically removed a manual step from every file that passed through.' }
+    ],
+    stages: [
+      { label: 'ingest', slug: 'ingest', role: 'clinical datasets', detail: 'Clinical datasets of roughly seventy-five columns processed in Databricks.', flow: ['databricks', '~75 columns'] },
+      { label: 'classify', slug: 'classify', role: 'the llm pass', detail: 'An LLM-powered pipeline identifies PII and PHI across the dataset.', flow: ['llm pipeline', 'pii', 'phi'] },
+      { label: 'variants', slug: 'variants', role: 'role-based outputs', detail: 'Three role-based dataset variants generated automatically from the classification result.', flow: ['3 variants', 'generated automatically'] },
+      { label: 'accuracy', slug: 'accuracy', role: 'the measured outcome', detail: 'Classification accuracy improved from 65% to 98%.', flow: ['65% → 98%'] },
+      { label: 'speed', slug: 'speed', role: 'fifteen minutes to ten seconds', detail: 'Processing time per file fell from roughly fifteen minutes to under ten seconds.', flow: ['~15 min → <10s', 'per file'] }
+    ]
+  },
+  {
+    file: 'rag-docs-assistant', name: 'RAG-DOCS-ASSISTANT', year: '2026', domain: 'retrieval + evaluation · in progress',
+    perm: '-rw-r--r--', dirmeta: '-a---  08/12/2026  2:06 PM',
+    one: 'testing whether retrieval actually fixes hallucination',
+    lede: 'LLMs answer from memory, which is either stale or confidently wrong on precise technical detail. Retrieval is the accepted fix — Decagon, Sierra and Quantstruct all exist because it does not fully work. I built a RAG assistant over FastAPI\'s real documentation to test that claim directly rather than assume it.',
+    metrics: [{ v: '95.6%', l: 'faithfulness, RAGAS on a 20-question golden set' }, { v: '77–81%', l: 'context precision, measured against a live API' }, { v: '45.7% → 3.7%', l: 'largest file\'s share of the vector store' }],
+    stack: ['Python', 'ChromaDB', 'sentence-transformers', 'Claude Sonnet 5', 'Haiku 4.5 (judge)', 'RAGAS', 'Langfuse', 'Streamlit', 'FastAPI'],
+    chapters: [
+      { head: 'the premise', body: 'Grounding a model in retrieved documents is supposed to solve hallucination on precise facts. Whether it does is an empirical question, so the project is built around measurement rather than around the chat interface — the assistant is the test rig, the evaluation is the result.' },
+      { head: 'what the corpus was hiding', body: 'One changelog file was silently 45.7% of the entire vector store, crowding out the documentation it was meant to support. Removing it and nine other non-instructional files brought the largest single file down to 3.7%. Nothing in the interface would ever have shown that — it only appears if you measure what retrieval is actually returning.' },
+      { head: 'chunking is retrieval', body: 'Naive fixed-length chunking was slicing text mid-sentence. Markdown-aware chunking raised the correct chunk\'s similarity for a test query from 0.283 to 0.345, and took the correct source file from absent in the top four results to holding three of the four slots. Same model, same corpus, same query — the difference was entirely in how the text was cut.' }
+    ],
+    stages: [
+      { label: 'retrieval', slug: 'retrieval', role: 'local, no api cost', detail: 'ChromaDB as a local vector store with Hugging Face sentence-transformer embeddings, and a custom markdown-aware chunker that respects document structure instead of character counts.', flow: ['chromadb', 'sentence-transformers', 'markdown-aware chunker', 'no embedding api cost'] },
+      { label: 'generation', slug: 'generation', role: 'answering from context', detail: 'Claude Sonnet 5 generates from the retrieved context. The generation model is deliberately separate from the model that judges it.', flow: ['claude sonnet 5', 'retrieved context', 'grounded answer'] },
+      { label: 'interfaces', slug: 'interfaces', role: 'two front doors', detail: 'A Streamlit chat UI and a FastAPI JSON API over the same backend logic, so the thing being evaluated is the same thing being used.', flow: ['streamlit chat ui', 'fastapi json api', 'shared backend'] },
+      { label: 'evals', slug: 'evals', role: 'the actual product', detail: 'RAGAS faithfulness and context precision over a twenty-question golden set, plus a custom retrieval hit-rate check and a baseline-versus-RAG comparison script. Haiku 4.5 judges so the generator never grades its own work — and so evaluation stays cheap enough to run often.', flow: ['ragas: faithfulness, precision', 'retrieval hit-rate', 'baseline vs rag', 'haiku 4.5 as judge'] },
+      { label: 'tracing', slug: 'tracing', role: 'why it answered that', detail: 'Langfuse traces every request with eval scores attached to the trace, which is how the corpus and chunking bugs surfaced at all. Five further bugs across the eval pipeline were fixed by reading library source directly — an async-client requirement in RAGAS, an Anthropic restriction on combining temperature with top_p, a Langfuse score-attachment requirement, and an instructor retry-loop bug.', flow: ['langfuse tracing', 'scores on traces', '5 pipeline bugs fixed', 'read the source, not the guess'] }
+    ]
+  },
+  {
+    file: 'combat24', name: 'Combat24', year: '2026', domain: 'full-stack product',
+    perm: '-rwxr-xr-x', dirmeta: '-a---  06/19/2026 11:02 AM',
+    one: 'co-founded; built its site, member app and access systems',
+    lede: 'I co-founded Combat24 and own everything digital and technical in it. The website was not generating leads and the third-party membership software did not fit operations — one problem in two places: losing members at the top of the funnel and time at the bottom.',
+    metrics: [{ v: '1–2 → ~10', l: 'organic enquiries per week, 5x' }, { v: '200+', l: 'members on daily operations' }, { v: '3', l: 'surfaces: member app, admin, access' }],
+    stack: ['React', 'JavaScript', 'Claude Code', 'SEO', 'QR access', 'Full-stack'],
+    chapters: [
+      { head: 'the problem', body: 'The brief could have been "redesign the website". The actual problem was lead generation, so I rebuilt it with an SEO-first approach — organic enquiries went from one or two a week to about ten.' },
+      { head: 'the decision', body: 'Replace the third-party membership software rather than integrate with it. A member app, an admin portal and QR-based access, built to the way the gym actually runs its day, now support over two hundred members.' },
+      { head: 'end to end', body: 'As co-founder I own the whole digital surface — marketing, the site, the member app, the admin systems — so the problem framing, the build and the outcome all sit with me. Success is measured in enquiries and daily operations, not launches.' }
+    ],
+    stages: [
+      { label: 'diagnosis', slug: 'diagnosis', role: 'find the real problem', detail: 'I identified poor lead generation as the core business problem before touching the build.', flow: ['problem identified', 'lead generation'] },
+      { label: 'site', slug: 'site', role: 'seo-first rebuild', detail: 'Rebuilt the website with an SEO-first approach using Claude Design and Claude Code. Organic enquiries went from one or two a week to about ten.', flow: ['seo-first', 'claude design + code', '1–2 → ~10 / week'] },
+      { label: 'member app', slug: 'member', role: 'the member surface', detail: 'A member app as one of three surfaces in the membership management platform.', flow: ['member app', 'full-stack'] },
+      { label: 'admin', slug: 'admin', role: 'the operator surface', detail: 'An admin portal supporting daily operations for more than two hundred members, replacing the third-party software it ran on before.', flow: ['admin portal', '200+ members', 'daily operations'] },
+      { label: 'access', slug: 'access', role: 'qr entry', detail: 'A QR-based access system, built as part of the same platform rather than bolted on.', flow: ['qr access', 'part of platform'] }
+    ]
+  },
+  {
+    file: 'conduit', name: 'Conduit', year: '2025', domain: 'data platform',
+    perm: '-rw-r--r--', dirmeta: '-a---  09/27/2025  8:31 AM',
+    one: 'two million vendor records, four teams, one standard',
+    lede: 'Vendor and event data lived in the wrong places for the people who needed it. Conduit is the pipeline work that moved it, standardised it, and made it fast enough to trust.',
+    metrics: [{ v: '2M+', l: 'vendor records migrated' }, { v: '200K+', l: 'daily events into Snowflake' }, { v: '30% / 50%', l: 'runtime cut / faster anomaly detection' }],
+    stack: ['Databricks', 'Denodo', 'Snowflake', 'Python', 'SQL', 'Delta Lake'],
+    chapters: [
+      { head: 'the problem', body: 'Four business teams needed the same vendor data, held in Databricks rather than anywhere they could consume it. Separately, a high-throughput event stream needed to land in Snowflake reliably enough to trust.' },
+      { head: 'the decision', body: 'A multi-layer pipeline from Databricks into Denodo producing standardised datasets for all four teams, and automated distribution monitoring on the event path — which halved anomaly detection time and improved reliability.' },
+      { head: 'making it fast', body: 'Runtime came down thirty percent through Delta optimisation and partition pruning. Cheaper and faster is not a bonus in pipeline work — it is what makes the data current enough to use.' }
+    ],
+    stages: [
+      { label: 'sources', slug: 'sources', role: 'where it starts', detail: 'Two paths: vendor records held in Databricks, and a high-throughput event stream.', flow: ['vendor records', 'event stream'] },
+      { label: 'layers', slug: 'layers', role: 'multi-layer pipeline', detail: 'A multi-layer pipeline producing standardised datasets for four business teams.', flow: ['multi-layer', 'standardised datasets', '4 teams'] },
+      { label: 'denodo', slug: 'denodo', role: 'the serving layer', detail: 'More than two million vendor records moved from Databricks into Denodo.', flow: ['databricks → denodo', '2M+ records'] },
+      { label: 'snowflake', slug: 'snowflake', role: 'high-throughput etl', detail: 'More than two hundred thousand events a day into Snowflake, with automated distribution monitoring that cut anomaly detection time by half and improved reliability.', flow: ['200k+ daily events', 'distribution monitoring', '−50% detection time'] },
+      { label: 'tuning', slug: 'tuning', role: 'thirty percent faster', detail: 'Pipeline runtime reduced 30% through Delta optimisation and partition pruning.', flow: ['delta optimisation', 'partition pruning', '−30% runtime'] }
+    ]
+  }
+];
+
+const BELIEFS = [
+  { head: 'The demo is not the system.', body: 'Anything can look intelligent for ninety seconds. What matters is the behaviour on the malformed receipt, the third retry, and the day a policy changes in one country and not the others. ARIA reaching over a thousand requests a month across four countries is a different artifact from ARIA working once.' },
+  { head: 'Find the problem behind the request.', body: 'Combat24 asked for a website. The problem was lead generation, so that is what I built against — organic enquiries went up fivefold. The first job is almost always reframing the ask, not answering it.' },
+  { head: 'Measure it, do not assume it.', body: 'Retrieval is supposed to stop a model inventing details. Measuring it turned up a changelog quietly occupying 45.7% of my vector store and a chunker slicing sentences in half — neither visible from the interface. The eval harness is not paperwork around the build; it is the part that tells you whether the build works.' }
+];
+
+const STACK = [
+  { name: 'intelligence', items: ['agentic ai on c3.ai', 'langchain, langgraph', 'rag and retrieval', 'llm classification pipelines', 'copilot studio, mcp', 'policy-based reasoning', 'sentence-transformer embeddings', 'ocr and extraction'] },
+  { name: 'evaluation', items: ['ragas: faithfulness, precision', 'langfuse tracing', 'golden-set evaluation', 'retrieval hit-rate', 'baseline vs rag comparison', 'llm-as-judge'] },
+  { name: 'engineering', items: ['python, sql, javascript', 'c++, java', 'fastapi, streamlit', 'react', 'docker, ci/cd', 'git'] },
+  { name: 'data', items: ['azure', 'databricks', 'snowflake', 'postgresql', 'denodo', 'chromadb', 'etl pipelines'] },
+  { name: 'delivery', items: ['power bi, power automate', 'powerapps', 'aha! product management', 'problem framing', 'stakeholder translation', 'sole-engineer ownership'] }
+];
+
+const ROLES = [
+  { hash: 'a71c4e9', title: 'AI Engineer', org: 'GSK', years: '2026 — now',
+    brief: 'Building and running enterprise AI agents on GSK\'s internal platform, from architecture through production support. Scope covers the agent itself, the integrations it depends on, and the platform infrastructure underneath it.',
+    shipped: ['ARIA reimbursement agent — 10 days to 1 day, 4 countries, 1,000+ requests a month, shipped as sole engineer', '15+ full-stack features across two production apps via Copilot Studio and C3 MCP — a 10-week roadmap in 3 weeks', '12 C3.ai platform upgrades across cluster, environment and application layers with zero unplanned downtime', 'Containerised the C3.ai development workflow with Docker and CI/CD — onboarding time down ~75% for 10+ engineers', 'Diagnosed and fixed a defect on a live demand forecasting app now used 300+ times a month by a 12-person planning team'] },
+  { hash: '5f2b8d1', title: 'Data Engineer', org: 'GSK', years: '2023 — 2025',
+    brief: 'Data engineering for R&D: classification pipelines over clinical data, migrations into the serving layer, high-throughput ETL, and the reporting automation that removed recurring manual work across the department.',
+    shipped: ['LLM PII/PHI classification pipeline — 15 minutes to under 10 seconds per file, accuracy 65% to 98%', 'Moved 2M+ vendor records from Databricks to Denodo for 4 business teams; runtime down 30%', 'ETL pipeline processing 200K+ daily events into Snowflake, anomaly detection time halved', 'Portfolio health dashboard adopted by every product owner and director — 1 day to under 30 seconds', 'Automated R&D investment allocation to zero data quality issues; embedding similarity analysis drove 4 proposal restructures'] },
+  { hash: 'c93a067', title: 'Co-founder', org: 'Combat24', years: '2024 — now',
+    brief: 'Co-founder at combat24.in, responsible for everything digital and technical — marketing, website, the member app, the admin systems and the infrastructure under them. Diagnosed lead generation as the business problem, rebuilt the site around it, then replaced the third-party membership software with a platform built for how the business actually operates.',
+    shipped: ['Organic enquiries from 1–2 to ~10 per week through an SEO-first rebuild', 'Membership platform with member app, admin portal and QR access for 200+ members', 'Retired third-party software and its recurring cost'] },
+  { hash: '0d4e1f8', title: 'B.Tech, Computer Science and Engineering', org: 'Ramaiah University of Applied Sciences', years: '2019 — 2023',
+    brief: 'Computer science and engineering at Ramaiah University of Applied Sciences, Bengaluru. Graduated with a CGPA of 8.7.',
+    shipped: ['CGPA 8.7', 'Bengaluru, India'] }
+];
+
+const NAVITEMS = [
+  ['whoami', 'whoami', 'who I am and what I build'],
+  ['projects', 'projects', 'five projects, with case files'],
+  ['philosophy', 'philosophy', 'how I work'],
+  ['stack', 'stack', 'tools and capabilities'],
+  ['experience', 'log', 'roles, as commits'],
+  ['contact', 'mail', 'get in touch']
+];
+
+const STORE = 'portfolio-shell';
+
+class Component extends DCLogic {
+  state = { open: null, stage: 0, hovered: null, roleOpen: 0, active: 'whoami', narrow: false, menu: false, shell: null };
+
+  componentDidMount() {
+    let saved = null;
+    try { saved = window.localStorage.getItem(STORE); } catch (e) { saved = null; }
+    const shell = (saved === 'pwsh' || saved === 'zsh') ? saved : (this.props.shell === 'pwsh' ? 'pwsh' : 'zsh');
+    this.setState({ shell: shell });
+    this.paint(shell);
+
+    this._fit = () => {
+      const n = window.innerWidth < 720;
+      if (n !== this.state.narrow) this.setState({ narrow: n });
+    };
+    this._fit();
+    window.addEventListener('resize', this._fit, { passive: true });
+
+    this._spyScroll = () => {
+      if (this._spyRaf) return;
+      this._spyRaf = requestAnimationFrame(() => {
+        this._spyRaf = null;
+        const mid = window.innerHeight * 0.42;
+        let best = null, bestD = Infinity;
+        NAVITEMS.forEach(([, id]) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          const r = el.getBoundingClientRect();
+          const d = (r.top <= mid && r.bottom >= mid) ? 0 : Math.min(Math.abs(r.top - mid), Math.abs(r.bottom - mid));
+          if (d < bestD) { bestD = d; best = id; }
+        });
+        if (best && best !== this.state.active) this.setState({ active: best });
+      });
+    };
+    this._spyScroll();
+    window.addEventListener('scroll', this._spyScroll, { passive: true });
+
+    if ((this.props.scrollReveal ?? true) === false) return;
+    this._io = new IntersectionObserver((es) => {
+      es.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'none';
+          this._io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.06 });
+    setTimeout(() => {
+      document.querySelectorAll('section[data-screen-label]').forEach((el, i) => {
+        if (i === 0) return;
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(14px)';
+        el.style.transition = 'opacity 700ms cubic-bezier(.16,1,.3,1), transform 700ms cubic-bezier(.16,1,.3,1)';
+        this._io.observe(el);
+      });
+    }, 80);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._fit);
+    window.removeEventListener('scroll', this._spyScroll);
+    if (this._io) this._io.disconnect();
+  }
+
+  paint(shell) {
+    const t = THEMES[shell] || THEMES.zsh;
+    const h = document.documentElement;
+    if (!h) return;
+    const vars = {
+      '--t-bg': t.bg, '--t-fg': t.fg, '--t-accent': t.accent, '--t-mut': t.mut,
+      '--t-dim': t.dim, '--t-faint': t.faint, '--t-line': t.line, '--t-line2': t.line2,
+      '--t-tint': t.tint, '--t-tint2': t.tint2, '--t-chrome': t.chrome,
+      '--t-font': t.font, '--t-radius': t.radius, '--t-radius-lg': t.radiusLg,
+      '--t-scan': t.scan
+    };
+    [h, document.body].forEach((el) => {
+      if (!el) return;
+      Object.keys(vars).forEach((k) => el.style.setProperty(k, vars[k]));
+    });
+  }
+
+  setShell(shell) {
+    try { window.localStorage.setItem(STORE, shell); } catch (e) { /* private mode */ }
+    this.paint(shell);
+    this.setState({ shell: shell, menu: false });
+  }
+
+  openCase(i) {
+    this.setState({ open: i, stage: 0 });
+    requestAnimationFrame(() => {
+      const el = document.getElementById('projects');
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 64, behavior: 'smooth' });
+    });
+  }
+
+  renderVals() {
+    const key = this.state.shell === 'pwsh' ? 'pwsh' : 'zsh';
+    const T = THEMES[key];
+    const S = SHELL[key];
+    const openIdx = this.state.open;
+    const isCase = openIdx !== null;
+    const c = PROJECTS[isCase ? openIdx : 0];
+    const st = Math.min(this.state.stage, c.stages.length - 1);
+    const stage = c.stages[st];
+    const nextIdx = isCase ? (openIdx + 1) % PROJECTS.length : 0;
+    const cwd = isCase ? '~/projects/' + c.file : '~';
+
+    const activeCmd = (this.state.active === 'projects')
+      ? (isCase ? (this.state.narrow ? S.catBare(c.file) : S.cat(c.file)) : S.ls)
+      : (this.state.active === 'whoami' ? S.whoami
+        : this.state.active === 'log' ? S.log
+        : this.state.active === 'mail' ? S.mail
+        : this.state.active === 'stack' ? S.tree
+        : S.approach);
+
+    return {
+      themeVars: {
+        '--t-bg': T.bg, '--t-fg': T.fg, '--t-accent': T.accent, '--t-mut': T.mut,
+        '--t-dim': T.dim, '--t-faint': T.faint, '--t-line': T.line, '--t-line2': T.line2,
+        '--t-tint': T.tint, '--t-tint2': T.tint2, '--t-chrome': T.chrome,
+        '--t-font': T.font, '--t-radius': T.radius, '--t-radius-lg': T.radiusLg,
+        '--t-scan': T.scan
+      },
+      draft: this.props.architectureDraft ?? true,
+      isZsh: key === 'zsh',
+      zshWide: key === 'zsh' && !this.state.narrow,
+      isPwsh: key === 'pwsh',
+      pwshWide: key === 'pwsh' && !this.state.narrow,
+      shells: ['zsh', 'pwsh'].map((k) => ({
+        label: THEMES[k].label, title: THEMES[k].title,
+        bg: k === key ? T.tint2 : 'transparent',
+        color: k === key ? T.accent : T.mut,
+        pick: () => this.setShell(k)
+      })),
+      titleText: key === 'pwsh'
+        ? (this.state.narrow
+            ? (isCase ? 'C:\\portfolio\\projects\\' + c.file : 'C:\\portfolio')
+            : 'Windows PowerShell — ' + (isCase ? 'C:\\portfolio\\projects\\' + c.file : 'C:\\portfolio'))
+        : 'arvind@portfolio: ' + cwd,
+      prompt: S.prompt, caret: S.caret, arrow: S.arrow, navGlyph: S.navGlyph,
+      lsHeader: S.lsHeader, backLabel: S.back, depsLabel: S.deps, helpCmd: S.help,
+      hint: S.hint,
+      exitLine: S.exit(cwd),
+      exitNote: S.exitNote,
+      cmd: {
+        whoami: S.whoami, ls: S.ls, approach: S.approach,
+        tree: S.tree, log: S.log, readme: S.readme, mail: S.mail, resume: S.resume
+      },
+      facts: [
+        { k: 'role', v: 'AI Engineer, GSK', bullet: S.bullet },
+        { k: 'focus', v: 'enterprise AI agents, automation, data', bullet: S.bullet },
+        { k: 'shipped', v: '8 systems to production', bullet: S.bullet },
+        { k: 'based', v: 'Bengaluru, India', bullet: S.bullet }
+      ],
+      wide: !this.state.narrow,
+      narrow: this.state.narrow,
+      rowCols: this.state.narrow ? 'auto 1fr auto' : 'auto auto 1fr auto',
+      indexView: !isCase,
+      caseView: isCase,
+      projects: PROJECTS.map((p, i) => {
+        const on = this.state.hovered === i;
+        return {
+          meta: key === 'pwsh' ? p.dirmeta : p.perm,
+          file: S.fileLabel(p.file), one: p.one, year: p.year,
+          nameColor: on ? T.accent : T.fg,
+          arrowColor: on ? T.accent : T.dim,
+          arrow: on ? S.arrow : ' ',
+          bg: on ? T.tint2 : 'transparent',
+          hover: () => this.setState({ hovered: i }),
+          unhover: () => this.setState({ hovered: null }),
+          open: () => this.openCase(i)
+        };
+      }),
+      c: {
+        name: c.name, year: c.year, domain: c.domain, lede: c.lede,
+        catCmd: S.cat(c.file),
+        metrics: c.metrics,
+        chapters: c.chapters.map((ch) => ({ head: ch.head, body: ch.body, marker: S.marker })),
+        stack: c.stack.map((name) => ({ name }))
+      },
+      stages: c.stages.map((s, i) => ({
+        label: s.label,
+        bg: i === st ? T.tint2 : 'transparent',
+        underline: i === st ? T.accent : 'transparent',
+        color: i === st ? T.fg : T.mut,
+        select: () => this.setState({ stage: i })
+      })),
+      stage: {
+        cmd: S.trace(stage.slug), role: stage.role, detail: stage.detail,
+        flow: stage.flow.map((label, i) => ({
+          label,
+          glyph: i === stage.flow.length - 1 ? S.last : S.branch,
+          glyphColor: i === 0 ? T.accent : T.faint,
+          color: i === 0 ? T.fg : T.mut
+        }))
+      },
+      nextCmd: S.cat(PROJECTS[nextIdx].file),
+      nextCase: () => this.openCase(nextIdx),
+      closeCase: () => {
+        this.setState({ open: null, hovered: null });
+        requestAnimationFrame(() => {
+          const el = document.getElementById('projects');
+          if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 64, behavior: 'smooth' });
+        });
+      },
+      beliefs: BELIEFS,
+      stackTree: STACK.map((g) => ({
+        name: S.dirLabel(g.name),
+        items: g.items.map((name, i) => ({ name, glyph: i === g.items.length - 1 ? S.last : S.branch }))
+      })),
+      roles: ROLES.map((r, i) => ({
+        hash: r.hash, title: r.title, org: r.org, years: r.years, brief: r.brief,
+        shipped: r.shipped.map((text) => ({ text })),
+        open: this.state.roleOpen === i,
+        mark: this.state.roleOpen === i ? '[-]' : '[+]',
+        markColor: this.state.roleOpen === i ? T.accent : T.dim,
+        toggle: () => this.setState((s) => ({ roleOpen: s.roleOpen === i ? -1 : i }))
+      })),
+      channels: [
+        { label: 'email', value: 'arvindacharya2000@gmail.com', href: 'mailto:arvindacharya2000@gmail.com' },
+        { label: 'linkedin', value: 'linkedin.com/in/arvindacharya', href: 'https://www.linkedin.com/in/arvindacharya' },
+        { label: 'github', value: 'github.com/arvindacharya', href: 'https://github.com/arvindacharya' },
+        { label: 'combat24', value: 'combat24.in', href: 'https://combat24.in' },
+        { label: 'résumé', value: 'Arvind_Acharya_Resume.pdf', href: 'Arvind_Acharya_Resume.pdf' }
+      ],
+      nav: NAVITEMS.map(([label, id]) => ({
+        label, href: '#' + id,
+        color: this.state.active === id ? T.fg : T.mut,
+        bg: this.state.active === id ? T.tint2 : 'transparent'
+      })),
+      menuOpen: this.state.menu,
+      toggleMenu: () => this.setState((s) => ({ menu: !s.menu })),
+      activeCmd: activeCmd,
+      menuHint: this.state.menu ? 'close' : 'commands',
+      menuGlyph: this.state.menu ? '✕' : '▲',
+      barPrompt: key === 'pwsh' ? 'PS>' : S.prompt,
+      menu: NAVITEMS.map(([label, id, desc]) => ({
+        label, desc, href: '#' + id,
+        dot: this.state.active === id ? '▸' : S.bullet,
+        dotColor: this.state.active === id ? T.accent : T.mut,
+        color: this.state.active === id ? T.accent : T.fg
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+  html, body { margin:0; background:#0f0e0e; font-family:'Source Serif 4', Georgia, serif; color:#f3f2f2; }
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:20px;padding:40px 20px">
+  <div style="font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#9b9797">Portfolio · 402 × 874</div>
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="430px,900px">
+    <iframe src="./Portfolio Terminal.dc.html" title="Portfolio mobile" style="width:100%;height:calc(100% - 64px);margin-top:64px;border:none;background:#100E0C;display:block"></iframe>
+  </x-import>
+</div>
+</x-dc>
+</body>
+</html>

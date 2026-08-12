@@ -1,0 +1,58 @@
+/* Theme tokens. The zsh values are the defaults; App.jsx overwrites all of
+   these on :root and body whenever the shell changes. */
+:root {
+  --t-bg: #100E0C;
+  --t-fg: #E8E4DE;
+  --t-accent: #A3E635;
+  --t-mut: #8B857C;
+  --t-dim: #847D73;
+  --t-faint: #6B6459;
+  --t-line: rgba(232, 228, 222, 0.08);
+  --t-line2: rgba(232, 228, 222, 0.14);
+  --t-tint: rgba(163, 230, 53, 0.06);
+  --t-tint2: rgba(163, 230, 53, 0.10);
+  --t-chrome: rgba(16, 14, 12, 0.88);
+  --t-font: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --t-radius: 4px;
+  --t-radius-lg: 6px;
+  --t-scan: 0.5;
+}
+
+html { overflow-x: hidden; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--t-bg);
+  color: var(--t-fg);
+  font-family: var(--t-font);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  overflow-x: hidden;
+  transition: background 420ms ease, color 420ms ease;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--t-font);
+  font-weight: 600;
+}
+
+a { color: var(--t-fg); text-decoration: none; }
+a:hover { color: var(--t-accent); }
+
+button:hover { color: var(--t-fg); }
+
+::selection { background: var(--t-tint2); }
+
+*:focus-visible {
+  outline: 1px solid var(--t-accent);
+  outline-offset: 2px;
+}
+
+@keyframes t-caret { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
+@keyframes t-type { from { width: 0 } to { width: 100% } }
+@keyframes t-in { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+@keyframes t-boot { from { opacity: 0 } to { opacity: 1 } }
